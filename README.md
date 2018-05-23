@@ -1,7 +1,7 @@
 # Usefull_Commands
 I used to search in net for commands syntax. it's better to collect them for others.
 
-#run a command in ubuntu
+# run a command in ubuntu
 ctrl+alt+T to open a terminal
 alt+F2 to execute a command without terminal
 
@@ -21,13 +21,13 @@ UPDATE wp_postmeta SET meta_value = REPLACE(meta_value,'old_url','');
 //split a movie
 ffmpeg -ss 00:00:00 -t 00:46:00 -i inputfile outputfile
 
-#find last change files
+# find last change files
 find /<directory> -newermt "-24 hours" -ls
 
 //about mail
 pop3 can delete on serve but IMAP not.
 
-#ssh login without anyone know
+# ssh login without anyone know
 * at the end of ssh session :
 find / -mtime -1 |grep -v 'proc\|module\|cache\|lib\|kernel\|/sys/\|devices'
 * rm files that think log you
@@ -35,64 +35,64 @@ rm /var/log/wtmp /var/log/btmp /var/log/lastlog
 touch /var/log/wtmp /var/log/btmp /var/log/lastlog
 history -c
 
-#change grub2 mode
+# change grub2 mode
 sudo vi /etc/default/grub
 GRUB_CMDLINE_LINUX="text"
 update-grub2
 
-#obtain JAVA_HOME etc.
+# obtain JAVA_HOME etc.
 vi /etc/environment
 export
 
-#send stdout & stderr to /dev/null
+# send stdout & stderr to /dev/null
 > /dev/null 2>&1
 
-#display colored in bash
+# display colored in bash
 ??
 
-#create new user
+# create new user
 docker exec -ti [name_of_ocsrv_container] ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" username
 
-#connect to server from client with openconnect
+# connect to server from client with openconnect
 sudo openconnect [IP or URL] --user=username -p=password --authgroup=route    --servercert sha256:[has given on first use from bash]
 
 
-#install docker on ubuntu 16.04
+# install docker on ubuntu 16.04
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 sudo apt-get update
 sudo apt-get install -y docker-compose
 
-#install docker-compose
+# install docker-compose
 sudo curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
 sudo chmod +x /usr/local/bin/docker-compose
 docker-compose --version
 
-#docker pull , export and import from host to host
+# docker pull , export and import from host to host
 docker pull ubuntu
 docker run -t -i ubuntu /bin/bash
 
-#after desired changes, in another bash
+# after desired changes, in another bash
 docker ps
 docker export ID | gzip > ubuntu.tar.gz
-#in another host
+# in another host
 gzcat ubuntu.tar.gz | docker import - ubuntu-alice
 docker save ubuntu | gzip > ubuntu-golden.tar.gz
 gzcat ubuntu-golden.tar.gz | docker load
 
-#docker pull and transfer to another repo
+# docker pull and transfer to another repo
 docker pull ubuntu
 docker tag ubuntu another_repo
 docker push another_repo
 
 
-#import data to exist database in mysql/mariadb docker container
+# import data to exist database in mysql/mariadb docker container
 docker exec -i container_name mysql -uUser -pPassword --database=DBName < sqlfile
 
-#disable startup docker containers
+# disable startup docker containers
 * in /va/var/lib/docker/containers
 grep -irn '"RestartPolicy":{"Name":"always"' | cut -d \: -f 1
-#the result list is files with restartpolicy; change them to "RestartPolicy":{"Name":"no"
+# the result list is files with restartpolicy; change them to "RestartPolicy":{"Name":"no"
 grep -irn '"RestartPolicy":{"Name":"always"' | cut -d \: -f 1 | xargs -n 1 sed -i s/'"RestartPolicy":{"Name":"always"'/'"RestartPolicy":{"Name":"no"'/g
 
 //bash of docker container
@@ -112,34 +112,34 @@ ExecStop=/usr/bin/docker stop -t 2 redis_server
 [Install]
 WantedBy=local.target
 
-#change docker containers
+# change docker containers
 * after changes:
 docker commit container_name desired_name
 
-#multi command in docker container with exec option
+# multi command in docker container with exec option
 docker exec -ti [name_of_ocsrv_container] bash -c 'command1;command2;....'
 
-#delete container
+# delete container
 docker rm ocserv
 
-#stop and start docker daemon
+# stop and start docker daemon
 service docker stop
 service docker start
 
-#check started containers
+# check started containers
 docker ps
 
-#annyconnect ocserv with docker
+# annyconnect ocserv with docker
 
 * create and run new ocserv
 * https://github.com/TommyLau/docker-ocserv
 sudo docker run --name [name_of_ocsrv_container] --privileged -p 443:443 -p 443:443/udp -d tommylau/ocserv
 
-#bash of ocserv
+# bash of ocserv
 docker exec -it [ocserv_container_name] bin/bash
 ps aux | grep ^test | cut -d \  -f 6
 
-#gitlab runner
+# gitlab runner
 * Stop and remove the existing container:
 docker stop gitlab-runner && docker rm gitlab-runner
 
@@ -149,33 +149,33 @@ docker run -d --name [container_name] --restart always \
   -v /srv/gitlab-runner/config:/etc/gitlab-runner \
   gitlab/gitlab-runner:latest
 
-#with ssl
+# with ssl
 docker run -d --name [container_name] --restart always \
   -v /var/run/docker.sock:/var/run/docker.sock \
   -v /srv/gitlab-runner/config:/etc/gitlab-runner:Z \
   gitlab/gitlab-runner:latest
 
-#link css
+# link css
  <link rel="stylesheet" type="text/css" href="theme.css">
 
-#mongodb
+# mongodb
 
-#switched to mongodb shell
+# switched to mongodb shell
  mongo
 
-#list all databases
+# list all databases
  db.adminCommand('listDatabases')
 
-#use a database
+# use a database
  use [dbname]
 
-#show all collections
+# show all collections
  show collections
 
-#select all from a collection
+# select all from a collection
  db.[collname].find()
 
-#update a
+# update a
  db.[collname].update(
     { "[field]" : "[citria(first)]" },
     {
@@ -193,34 +193,34 @@ db.users.update( {"username":"[username]"},
 	}
 })
 
-#avoid duplicte value in bash
-export HISTCONTROL=ignoreboth:erasedups #in .bash_rc
+# avoid duplicte value in bash
+export HISTCONTROL=ignoreboth:erasedups # in .bash_rc
 
-#unlimited bash history
+# unlimited bash history
 export HISTFILESIZE=
 export HISTSIZE=
-#don’t store specific lines in bash history
+# don’t store specific lines in bash history
 HISTCONTROL=ignoreboth
 
-#record timestamp for each line
+# record timestamp for each line
 HISTTIMEFORMAT='%F %T '
 
-#save history immediately
+# save history immediately
 PROMPT_COMMAND='history -a'
 
-#append instead of writing
+# append instead of writing
 shopt -s histappend
 
-#use one command per line
+# use one command per line
 shopt -s cmdhist
 
-#kill all instances of an app with bash
+# kill all instances of an app with bash
 ps aux | grep [app_name] | cut -d \  -f 4,5,6 | xargs -n 1 kill -9
 
-#usefull alias for ~/.bashrc or /etc/bash.bashrc
+# usefull alias for ~/.bashrc or /etc/bash.bashrc
 alias rm='rm -i'
 
-#Prompt for history -c 
+# Prompt for history -c 
 * not sure to work
 history(){
 	if [ "$1" = "-c" ]
@@ -235,17 +235,17 @@ history(){
 	fi
 } 
 
-#crontab for history
+# crontab for history
 ??
 
-#diffrences between initd,SysV,systemD and upstart
+# diffrences between initd,SysV,systemD and upstart
 initd: /etc/init.d/[services] start/stop/status/restart/reload
-SysV: update-rc.d [service] remove/start/stop/status/restart/reload #or remove it from /etc/rc.*
+SysV: update-rc.d [service] remove/start/stop/status/restart/reload # or remove it from /etc/rc.*
 SystemD: systemctl disable/enable/start/stop/status/restart/reload [services]
 upstart: ??
 
 
-#ignore labtop lid suspend on close
+# ignore labtop lid suspend on close
 su -c 'vi /etc/systemd/logind.conf'
 
 * and set HandleLidSwitch to ignore:
@@ -253,6 +253,6 @@ HandleLidSwitch=ignore
 * and then restart systemd
 su -c 'systemctl restart systemd-logind.service'
 
-#login without password to ssh
+# login without password to ssh
 ssh-keygen
 ssh-copy-id user@host
