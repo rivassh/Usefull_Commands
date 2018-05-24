@@ -116,7 +116,7 @@ WantedBy=local.target
 * after changes:
 docker commit container_name desired_name
 
-# multi command in docker container with exec option
+# multi (two and more) commands in docker container with exec option
 docker exec -ti [name_of_ocsrv_container] bash -c 'command1;command2;....'
 
 # delete container
@@ -256,3 +256,51 @@ su -c 'systemctl restart systemd-logind.service'
 # login without password to ssh
 ssh-keygen
 ssh-copy-id user@host
+
+#DirectAdmin multi php version
+
+#SSL/TLS
+* https
+	- ??
+* ssh
+	- ??
+
+#change ports with firewall (iptables-ufw-firewalld)
+refrence: https://www.digitalocean.com/community/tutorials/how-to-set-up-a-basic-iptables-firewall-on-centos-6
+	*blocking null packets.
+		iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
+		The attack patterns use these to try and see how we configured the VPS and find out weaknesses
+	*reject syn-flood attack
+		iptables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
+		attackers open a new connection, but do not state what they want (ie. SYN, ACK, whatever)
+	*XMAS packets
+		iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP
+	*Open all Local
+		iptables -A INPUT -i lo -j ACCEPT
+	*Allow webserver traffic
+		iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+		iptables -A INPUT -p tcp -m tcp --dport 443 -j ACCEPT
+	*Allow email ports (SMTP,POP3,IMAP)
+		iptables -A INPUT -p tcp -m tcp --dport 25 -j ACCEPT
+		iptables -A INPUT -p tcp -m tcp --dport 465 -j ACCEPT
+		iptables -A INPUT -p tcp -m tcp --dport 110 -j ACCEPT
+		iptables -A INPUT -p tcp -m tcp --dport 995 -j ACCEPT
+		iptables -A INPUT -p tcp -m tcp --dport 143 -j ACCEPT
+		iptables -A INPUT -p tcp -m tcp --dport 993 -j ACCEPT
+	*Allow SSH on desired port
+		iptables -A INPUT -p tcp -m tcp --dport [port] -j ACCEPT
+	*Allow SSH on desired port for my IP
+		iptables -A INPUT -p tcp -s YOUR_IP_ADDRESS -m tcp --dport [port] -j ACCEPT
+	*Allow us to use outgoing connections (ie. ping from VPS or run software updates);
+		iptables -I INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+	*block everything else
+		iptables -P OUTPUT ACCEPT
+		iptables -P INPUT DROP		
+# disable root login
+ref: https://github.com/jrleszcz/linux-server-setup
+	* edit sshd file
+		/etc/ssh/sshd_config		
+		-change:
+			# Authentication:
+			PermitRootLogin no
+		reload ssh
