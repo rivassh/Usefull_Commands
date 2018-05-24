@@ -257,15 +257,15 @@ su -c 'systemctl restart systemd-logind.service'
 ssh-keygen
 ssh-copy-id user@host
 
-#DirectAdmin multi php version
+# DirectAdmin multi php version
 
-#SSL/TLS
+# SSL/TLS
 * https
 	- ??
 * ssh
 	- ??
 
-#change ports with firewall (iptables-ufw-firewalld)
+# change ports with firewall (iptables-ufw-firewalld)
 refrence: https://www.digitalocean.com/community/tutorials/how-to-set-up-a-basic-iptables-firewall-on-centos-6
 	*blocking null packets.
 		iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
