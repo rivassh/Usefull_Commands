@@ -271,12 +271,12 @@ refrence: https://www.digitalocean.com/community/tutorials/how-to-set-up-a-basic
 
  			iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP
  
-		The attack patterns use these to try and see how we configured the VPS and find out weaknesses
+The attack patterns use these to try and see how we configured the VPS and find out weaknesses
 * reject syn-flood attack
 
  			iptables -A INPUT -p tcp ! --syn -m state --state NEW -j DROP
  
-		attackers open a new connection, but do not state what they want (ie. SYN, ACK, whatever)
+attackers open a new connection, but do not state what they want (ie. SYN, ACK, whatever)
 * XMAS packets
 
  			iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP
@@ -313,7 +313,6 @@ refrence: https://www.digitalocean.com/community/tutorials/how-to-set-up-a-basic
  
 * block everything else
 
-		```	
 			iptables -P OUTPUT ACCEPT
 			iptables -P INPUT DROP		
  
@@ -325,5 +324,5 @@ ref: https://github.com/jrleszcz/linux-server-setup
 
  			# Authentication:
 			PermitRootLogin no
- 
-		reload ssh
+	
+reload ssh
