@@ -353,6 +353,7 @@ reload ssh
 * add current files 
 
 	git add .
+	
 * commit
 
 	git commit -m "first "
