@@ -161,9 +161,7 @@ GRUB_CMDLINE_LINUX="text"
 	docker run -d --name [container_name] --restart always 	-v /var/run/docker.sock:/var/run/docker.sock 	-v /srv/gitlab-runner/config:/etc/gitlab-runner:Z 	gitlab/gitlab-runner:latest
 
 # link css
-	```
  	<link rel="stylesheet" type="text/css" href="theme.css">
-	```
 # mongodb
 
 # switched to mongodb shell
@@ -351,9 +349,9 @@ reload ssh
 
 	git remote add origin url
 * add current files 
-
+```
 	git add .
-	
+```
 * commit
 
 	git commit -m "first "
