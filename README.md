@@ -5,35 +5,33 @@ I used to search in net for commands syntax. it's better to collect them for oth
 ctrl+alt+T to open a terminal
 alt+F2 to execute a command without terminal
 
-//update url of wordpress
-/////////////////////////////////////////////////////
-////////best way to replace all in editor////////////
-/////////////////////////////////////////////////////
-/////// sed -i -e 's/http\:\/\/url\.com/http\:\/\/localhost\:port/g' hello.txt ///////////
-/////////////////////////////////////////////////////
-update wp_options set option_value = 'url:port' where option_name = 'siteurl';
-update wp_options set option_value = 'url:port' where option_name = 'home';
-UPDATE wp_links SET link_image = REPLACE(link_image,'old_url','');
-UPDATE wp_links SET link_url = REPLACE(link_url,'old_url','');
-UPDATE wp_posts SET post_content = REPLACE(post_content,'old_url','');
-UPDATE wp_postmeta SET meta_value = REPLACE(meta_value,'old_url','');
+* update url of wordpress
+* best way to replace all in editor
+	sed -i -e 's/http\:\/\/url\.com/http\:\/\/localhost\:port/g' hello.txt 
+* or update database
+	update wp_options set option_value = 'url:port' where option_name = 'siteurl';
+	update wp_options set option_value = 'url:port' where option_name = 'home';
+	UPDATE wp_links SET link_image = REPLACE(link_image,'old_url','');
+	UPDATE wp_links SET link_url = REPLACE(link_url,'old_url','');
+	UPDATE wp_posts SET post_content = REPLACE(post_content,'old_url','');
+	UPDATE wp_postmeta SET meta_value = REPLACE(meta_value,'old_url','');
 
-//split a movie
-ffmpeg -ss 00:00:00 -t 00:46:00 -i inputfile outputfile
+# split a movie
+	ffmpeg -ss 00:00:00 -t 00:46:00 -i inputfile outputfile
 
 # find last change files
 find /<directory> -newermt "-24 hours" -ls
 
-//about mail
+# about mail
 pop3 can delete on serve but IMAP not.
 
 # ssh login without anyone know
 * at the end of ssh session :
-find / -mtime -1 |grep -v 'proc\|module\|cache\|lib\|kernel\|/sys/\|devices'
+	find / -mtime -1 |grep -v 'proc\|module\|cache\|lib\|kernel\|/sys/\|devices'
 * rm files that think log you
-rm /var/log/wtmp /var/log/btmp /var/log/lastlog
-touch /var/log/wtmp /var/log/btmp /var/log/lastlog
-history -c
+	rm /var/log/wtmp /var/log/btmp /var/log/lastlog
+	touch /var/log/wtmp /var/log/btmp /var/log/lastlog
+	history -c
 
 # change grub2 mode
 sudo vi /etc/default/grub
@@ -45,115 +43,115 @@ vi /etc/environment
 export
 
 # send stdout & stderr to /dev/null
-> /dev/null 2>&1
+	> /dev/null 2>&1
 
 # display colored in bash
-??
+	??
 
 # create new user
-docker exec -ti [name_of_ocsrv_container] ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" username
+	docker exec -ti [name_of_ocsrv_container] ocpasswd -c /etc/ocserv/ocpasswd -g "Route,All" username
 
 # connect to server from client with openconnect
-sudo openconnect [IP or URL] --user=username -p=password --authgroup=route    --servercert sha256:[has given on first use from bash]
+	sudo openconnect [IP or URL] --user=username -p=password --authgroup=route    --servercert sha256:[has given on first use from bash]
+
+# docker
+### install docker on ubuntu 16.04
+	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+	sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+	sudo apt-get update
+	sudo apt-get install -y docker-compose
+
+### install docker-compose
+	sudo curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
+	sudo chmod +x /usr/local/bin/docker-compose
+	docker-compose --version
+
+### docker pull , export and import from host to host
+	docker pull ubuntu
+	docker run -t -i ubuntu /bin/bash
+
+### after desired changes, in another bash
+	docker ps
+	docker export ID | gzip > ubuntu.tar.gz
+### in another host
+	gzcat ubuntu.tar.gz | docker import - ubuntu-alice
+	docker save ubuntu | gzip > ubuntu-golden.tar.gz
+	gzcat ubuntu-golden.tar.gz | docker load
+
+### docker pull and transfer to another repo
+	docker pull ubuntu
+	docker tag ubuntu another_repo
+	docker push another_repo
 
 
-# install docker on ubuntu 16.04
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-sudo apt-get update
-sudo apt-get install -y docker-compose
+### import data to exist database in mysql/mariadb docker container
+	docker exec -i container_name mysql -uUser -pPassword --database=DBName < sqlfile
 
-# install docker-compose
-sudo curl -L https://github.com/docker/compose/releases/download/1.17.0/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose
-sudo chmod +x /usr/local/bin/docker-compose
-docker-compose --version
-
-# docker pull , export and import from host to host
-docker pull ubuntu
-docker run -t -i ubuntu /bin/bash
-
-# after desired changes, in another bash
-docker ps
-docker export ID | gzip > ubuntu.tar.gz
-# in another host
-gzcat ubuntu.tar.gz | docker import - ubuntu-alice
-docker save ubuntu | gzip > ubuntu-golden.tar.gz
-gzcat ubuntu-golden.tar.gz | docker load
-
-# docker pull and transfer to another repo
-docker pull ubuntu
-docker tag ubuntu another_repo
-docker push another_repo
-
-
-# import data to exist database in mysql/mariadb docker container
-docker exec -i container_name mysql -uUser -pPassword --database=DBName < sqlfile
-
-# disable startup docker containers
+### disable startup docker containers
 * in /va/var/lib/docker/containers
-grep -irn '"RestartPolicy":{"Name":"always"' | cut -d \: -f 1
-# the result list is files with restartpolicy; change them to "RestartPolicy":{"Name":"no"
-grep -irn '"RestartPolicy":{"Name":"always"' | cut -d \: -f 1 | xargs -n 1 sed -i s/'"RestartPolicy":{"Name":"always"'/'"RestartPolicy":{"Name":"no"'/g
+	grep -irn '"RestartPolicy":{"Name":"always"' | cut -d \: -f 1
+* the result list is files with restartpolicy; change them to "RestartPolicy":{"Name":"no"
+	grep -irn '"RestartPolicy":{"Name":"always"' | cut -d \: -f 1 | xargs -n 1 sed -i s/'"RestartPolicy":{"Name":"always"'/'"RestartPolicy":{"Name":"no"'/g
 
-//bash of docker container
-docker exec -it container_name bash
+* bash of docker container
+	docker exec -it container_name bash
 
-# start docker container with systemd in centos 7
-# add container.service to /etc/systemd/system/
-[Unit]
-Description=Redis container
-After=docker.service
-
-[Service]
-Restart=always
-ExecStart=/usr/bin/docker start -a redis_server
-ExecStop=/usr/bin/docker stop -t 2 redis_server
-
-[Install]
-WantedBy=local.target
-
-# change docker containers
+### start docker container with systemd in centos 7
+* add container.service to /etc/systemd/system/
+	[Unit]
+	Description=Redis container
+	After=docker.service
+	
+	[Service]
+	Restart=always
+	ExecStart=/usr/bin/docker start -a redis_server
+	ExecStop=/usr/bin/docker stop -t 2 redis_server
+	
+	[Install]
+	WantedBy=local.target
+		
+### change docker containers
 * after changes:
 docker commit container_name desired_name
 
-# multi (two and more) commands in docker container with exec option
+### multi (two and more) commands in docker container with exec option
 docker exec -ti [name_of_ocsrv_container] bash -c 'command1;command2;....'
 
-# delete container
+### delete container
 docker rm ocserv
 
-# stop and start docker daemon
+### stop and start docker daemon
 service docker stop
 service docker start
 
-# check started containers
+### check started containers
 docker ps
 
-# annyconnect ocserv with docker
+### annyconnect ocserv with docker
 
 * create and run new ocserv
 * https://github.com/TommyLau/docker-ocserv
 sudo docker run --name [name_of_ocsrv_container] --privileged -p 443:443 -p 443:443/udp -d tommylau/ocserv
 
-# bash of ocserv
+### bash of ocserv
 docker exec -it [ocserv_container_name] bin/bash
 ps aux | grep ^test | cut -d \  -f 6
 
-# gitlab runner
+### gitlab runner
 * Stop and remove the existing container:
 docker stop gitlab-runner && docker rm gitlab-runner
 
 * Start the container as you did originally:
-docker run -d --name [container_name] --restart always \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -v /srv/gitlab-runner/config:/etc/gitlab-runner \
-  gitlab/gitlab-runner:latest
+	docker run -d --name [container_name] --restart always \
+	-v /var/run/docker.sock:/var/run/docker.sock \
+	-v /srv/gitlab-runner/config:/etc/gitlab-runner \
+	gitlab/gitlab-runner:latest
 
-# with ssl
-docker run -d --name [container_name] --restart always \
-  -v /var/run/docker.sock:/var/run/docker.sock \
-  -v /srv/gitlab-runner/config:/etc/gitlab-runner:Z \
-  gitlab/gitlab-runner:latest
+### with ssl
+	docker run -d --name [container_name] --restart always \
+	-v /var/run/docker.sock:/var/run/docker.sock \
+	-v /srv/gitlab-runner/config:/etc/gitlab-runner:Z \
+	gitlab/gitlab-runner:latest
 
 # link css
  <link rel="stylesheet" type="text/css" href="theme.css">
@@ -326,3 +324,25 @@ ref: https://github.com/jrleszcz/linux-server-setup
 			PermitRootLogin no
 	
 reload ssh
+
+# apache
+* list virtual hosts
+
+	apachectl -M
+
+* check configuration
+
+	apachectl -t
+
+# Git
+* move current directory to remote git repository
+* make a git repository in current directory
+	git init .
+* add server side url to current git repository as remote
+	git remote add origin url
+* add current files 
+	git add .
+* commit
+	git commit -m "first "
+* push to server
+	git push -u origin master
