@@ -8,18 +8,28 @@ I used to search in net for commands syntax. it's better to collect them for oth
 
 * update url of wordpress
 * best way to replace all in editor
+
+```	
 	sed -i -e 's/http\:\/\/url\.com/http\:\/\/localhost\:port/g' hello.txt 
+```	
 * or update database
 
+```
 	update wp_options set option_value = 'url:port' where option_name = 'siteurl';
 	update wp_options set option_value = 'url:port' where option_name = 'home';
 	UPDATE wp_links SET link_image = REPLACE(link_image,'old_url','');
 	UPDATE wp_links SET link_url = REPLACE(link_url,'old_url','');
 	UPDATE wp_posts SET post_content = REPLACE(post_content,'old_url','');
 	UPDATE wp_postmeta SET meta_value = REPLACE(meta_value,'old_url','');
+```
 
 # split a movie
 	ffmpeg -ss 00:00:00 -t 00:46:00 -i inputfile outputfile
+* in error with : 
+
+```
+	ffmpeg -ss 00:00:00 -t 00:46:00 -i inputfile -max_muxing_queue_size 400 outputfile
+```
 
 # find last change files
 	find /<directory> -newermt "-24 hours" -ls
@@ -344,21 +354,83 @@ reload ssh
 * move current directory to remote git repository
 * make a git repository in current directory
 
+```
 	git init .
+```	
+
 * add server side url to current git repository as remote
 
+```
 	git remote add origin url
+```	
+
 * add current files 
+
 ```
 	git add .
 ```
+
 * commit
 
+```
 	git commit -m "first "
+```	
+
 * push to server
 
+```
 	git push -u origin master
+```	
+
 * show configuration of git in current repository
 
+```
 	git config --get remote.origin.url
 	git remote show origin
+```
+* create new branch and switch on it
+
+```
+	git branch [new_branch_names]
+	git checkout [new_branch_names]
+```	
+
+or you can use this shorthand
+
+```
+	git checkout -b [new_branch_names]
+```	
+
+* merge two branches (hotfix into master)
+
+(https://git-scm.com/book/en/v2/Git-Branching-Basic-Branching-and-Merging)
+
+```
+	git checkout master
+	git merge iss53
+```
+
+in conflict use mergetool
+
+```
+	git mergetool
+```
+
+* list all git brances
+
+(http://gitready.com/intermediate/2009/02/13/list-remote-branches.html)
+
+```
+	git branch
+	git branch -a
+	git branch -r #
+```
+
+# laravel
+### migration
+* create new migration
+
+for update:
+```
+	php artisan make:migration [some_name_as_comment] --table=[table_name]
+```
