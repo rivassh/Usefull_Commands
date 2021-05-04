@@ -2,7 +2,7 @@ help to edit: https://gist.github.com/PurpleBooth/109311bb0361f32d87a2
 # Usefull_Commands
 I used to search in net for commands syntax. it's better to collect them for others.
 
-# [Named Link]('linux/Ubuntu.md' linux)
+# [Linux](linux/Ubuntu.md "linux guides")
 
 # about mail
 pop3 can delete on serve but IMAP not.
