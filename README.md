@@ -4,8 +4,7 @@ I used to search in net for commands syntax. it's better to collect them for oth
 
 # [Linux](linux/Ubuntu.md "linux guides")
 
-# about mail
-pop3 can delete on serve but IMAP not.
+# [others](others.md "other subjects")
 
 # ssh login without anyone know
 * at the end of ssh session :
