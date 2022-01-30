@@ -147,6 +147,18 @@ GRUB_CMDLINE_LINUX="text"
 ### check started containers
 	docker ps
 
+
+### Dockerfile
+
+#### install composer in a php Dockerfile 
+
+```    
+	RUN cd ~ \
+    && curl -sS http://getcomposer.org/download/2.2.5/composer.phar -o composer.phar \
+    && cp ~/composer.phar /usr/local/bin/composer \
+    && chmod +x /usr/local/bin/composer
+```
+
 ### annyconnect ocserv with docker
 
 * create and run new ocserv
