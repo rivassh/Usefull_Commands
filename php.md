@@ -22,3 +22,7 @@
     Arch - openssl
 
     https://superuser.com/a/371912
+
+# Design Patterns
+
+[summary link](DesignPatterns.md) 
