@@ -23,12 +23,20 @@ I used to search in net for commands syntax. it's better to collect them for oth
 	UPDATE wp_postmeta SET meta_value = REPLACE(meta_value,'old_url','');
 ```
 
-# split a movie
+# FFMpeg
+
+## split a movie
 	ffmpeg -ss 00:00:00 -t 00:46:00 -i inputfile outputfile
 * in error with : 
 
 ```
 	ffmpeg -ss 00:00:00 -t 00:46:00 -i inputfile -max_muxing_queue_size 400 outputfile
+```
+
+## reduce size
+
+```
+ffmpeg -i input.mp4 -vcodec libx265 -crf 28 output.mp4
 ```
 
 # find last change files
