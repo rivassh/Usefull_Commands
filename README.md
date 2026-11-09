@@ -476,6 +476,66 @@ document.body.appendChild(script);
 [php_documentation link](php.md)
 
 
+# mimo-safe
+
+Run any command with a 2GB memory + 2GB swap limit, in your own user session, without sudo.
+
+The command is wrapped by a transient systemd user scope unit (`systemd-run --user --scope`), so all its child processes are grouped under one cgroup capped at `MemoryMax=2G` and `MemorySwapMax=2G`. If the process exceeds 2GB of RAM, the kernel OOM killer terminates it (or it swaps, up to 2GB more).
+
+## The script
+
+`mimo-safe`:
+
+```
+#!/usr/bin/bash
+exec systemd-run --user --scope --same-dir \
+  --property=MemoryMax=2G --property=MemorySwapMax=2G \
+  "$@"
+```
+
+## Installation
+
+1. Save to `/usr/local/bin/mimo-safe` (or any location in your `PATH`):
+   ```
+   sudo cp mimo-safe /usr/local/bin/mimo-safe
+   ```
+2. Make it executable:
+   ```
+   sudo chmod +x /usr/local/bin/mimo-safe
+   ```
+3. Ensure your user systemd session is active, or start one:
+   ```
+   loginctl enable-lingo <username>
+   ```
+
+## Usage
+
+Run any command through `mimo-safe`:
+
+```
+mimo-safe ./my-program
+mimo-safe bash -c "python train.py"
+mimo-safe stress-ng --vm 1 --vm-bytes 1G --timeout 30s
+```
+
+`--same-dir` makes the command run in your current working directory.
+
+## Verify the limit is active
+
+```
+mimo-safe bash -c 'cat /sys/fs/cgroup/memory.max'
+```
+
+## Change the limits
+
+Edit `mimo-safe` and change the two `--property=` lines, e.g. for 512MB:
+
+```
+exec systemd-run --user --scope --same-dir \
+  --property=MemoryMax=512M --property=MemorySwapMax=512M \
+  "$@"
+```
+
 # Todo
 
 * openssl certificate

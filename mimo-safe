@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+# mimo-safe - run any command with 2GB memory + 2GB swap limits
+# Runs in the user's own systemd session (no sudo required).
+# Usage: mimo-safe <command> [args...]
+exec systemd-run --user --scope --same-dir \
+  --property=MemoryMax=2G --property=MemorySwapMax=2G \
+  "$@"
